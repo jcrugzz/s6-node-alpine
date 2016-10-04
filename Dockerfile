@@ -1,4 +1,4 @@
-FROM quay.io/justcontainers/base-alpine:0.12.2
+FROM quay.io/justcontainers/base-alpine:v0.12.2
 
 ENV VERSION=v4.6.0 NPM_VERSION=3
 
