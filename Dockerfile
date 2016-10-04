@@ -39,4 +39,4 @@ RUN apk --no-cache update && apk add --no-cache tcpdump bind-tools curl make gcc
     /usr/share/man /tmp/* /var/cache/apk/* /root/.npm /root/.node-gyp /root/.gnupg \
     /usr/lib/node_modules/npm/man /usr/lib/node_modules/npm/doc /usr/lib/node_modules/npm/html
 
-RUN curl -L https://github.com/sequenceiq/docker-alpine-dig/releases/download/v9.10.2/dig.tgz|tar -xzv -C /usr/local/bin/
+RUN  tar -xzv dig.tgz -C /usr/local/bin/
