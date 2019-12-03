@@ -11,7 +11,7 @@ ENV VERSION=v12.13.1  NPM_VERSION=6 YARN_VERSION=latest
 # ENV CONFIG_FLAGS="--without-npm" RM_DIRS=/usr/include
 # ENV CONFIG_FLAGS="--fully-static --without-npm" DEL_PKGS="libgcc libstdc++" RM_DIRS=/usr/include
 # For Intl builds uncomment
-# ENV CONFIG_FLAGS="--with-intl=full-icu --download=all"
+ENV CONFIG_FLAGS="--with-intl=full-icu --download=all"
 
 RUN apk add --no-cache curl make gcc g++ python linux-headers binutils-gold gnupg libstdc++ && \
   for server in ipv4.pool.sks-keyservers.net keyserver.pgp.com ha.pool.sks-keyservers.net; do \
