@@ -10,8 +10,6 @@ ENV VERSION=v12.13.1  NPM_VERSION=6 YARN_VERSION=latest
 # For base builds
 # ENV CONFIG_FLAGS="--without-npm" RM_DIRS=/usr/include
 # ENV CONFIG_FLAGS="--fully-static --without-npm" DEL_PKGS="libgcc libstdc++" RM_DIRS=/usr/include
-# For Intl builds uncomment
-ENV CONFIG_FLAGS="--with-intl=full-icu --download=all"
 
 RUN apk add --no-cache curl make gcc g++ python linux-headers binutils-gold gnupg libstdc++ && \
   for server in ipv4.pool.sks-keyservers.net keyserver.pgp.com ha.pool.sks-keyservers.net; do \
@@ -56,9 +54,12 @@ RUN apk add --no-cache curl make gcc g++ python linux-headers binutils-gold gnup
       rm ${YARN_VERSION}.tar.gz*; \
     fi; \
   fi && \
+  npm install --unsafe-perm -g full-icu && \
   apk del curl make gcc g++ python linux-headers binutils-gold gnupg ${DEL_PKGS} && \
   rm -rf ${RM_DIRS} /node-${VERSION}* /SHASUMS256.txt /tmp/* /var/cache/apk/* \
     /usr/share/man/* /usr/share/doc /root/.npm /root/.node-gyp /root/.config \
     /usr/lib/node_modules/npm/man /usr/lib/node_modules/npm/doc /usr/lib/node_modules/npm/docs \
     /usr/lib/node_modules/npm/html /usr/lib/node_modules/npm/scripts && \
   { rm -rf /root/.gnupg || true; }
+
+ENV NODE_ICU_DATA /usr/lib/node_modules/full-icu
