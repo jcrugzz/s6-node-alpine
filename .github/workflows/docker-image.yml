@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: ['14.15.0']
+        node_version: ['14.15.0']
         flavor: ['', '-intl', '-native', '-native-intl']
 
     steps:
@@ -27,11 +27,11 @@ jobs:
       if: matrix.flavor == '-native' || matrix.flavor == '-native-intl'
       run: echo '::set-output name=NATIVE::true'
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag jcrugzz/s6-node-alpine:${{ matrix.node_version }}${{ matrix.flavor }} --build-arg INTL=${{ steps.prep-intl.outputs.INTL }} --build-arg NATIVE=${{ steps.prep-native.outputs.NATIVE }}
+      run: docker build . --file Dockerfile --tag jcrugzz/s6-node-alpine:${{ matrix.node_version }}${{ matrix.flavor }} --build-arg NODE_VERSION=${{ matrix.node_version }} --build-arg INTL=${{ steps.prep-intl.outputs.INTL }} --build-arg NATIVE=${{ steps.prep-native.outputs.NATIVE }}
     - name: Docker Login
       uses: docker/login-action@v1.6.0
       with:
         # Password or personal access token used to log against the Docker registry
         password: ${{ secrets.docker_token }}
     - name: Push the Docker image
-      run: docker push jcrugzz/s6-node-alpine:${{ matrix.node-version }}${{ matrix.flavor }}
+      run: docker push jcrugzz/s6-node-alpine:${{ matrix.node_version }}${{ matrix.flavor }}
