@@ -64,7 +64,7 @@ RUN apk add --no-cache curl make gcc g++ python linux-headers binutils-gold gnup
     fi; \
   fi && \
   if [ "$NATIVE" != "true" ]; then \
-    apk del curl make gcc g++ python linux-headers binutils-gold gnupg ${DEL_PKGS} \
+    apk del curl make gcc g++ python linux-headers binutils-gold gnupg ${DEL_PKGS}; \
   fi && \
   rm -rf ${RM_DIRS} /node-${VERSION}* /SHASUMS256.txt /tmp/* /var/cache/apk/* \
     /usr/share/man/* /usr/share/doc /root/.npm /root/.node-gyp /root/.config \
