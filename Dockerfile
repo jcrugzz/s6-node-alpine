@@ -1,33 +1,42 @@
 FROM jcrugzz/base-alpine:3.10.3
 
+ARG NODE_VERSION=14.15.0
+ARG NPM_VERSION=6
+ARG NATIVE=false
+ENV NATIVE=${NATIVE}
+ARG INTL
+
 # ENV VERSION=v0.10.48 CFLAGS="-D__USE_MISC" NPM_VERSION=2
 # ENV VERSION=v0.12.14 NPM_VERSION=2
 # ENV VERSION=v4.7.0 NPM_VERSION=3
 # ENV VERSION=v5.11.1 NPM_VERSION=3
 # ENV VERSION=v8.12.0 NPM_VERSION=6
 # ENV VERSION=v12.18.4  NPM_VERSION=6 YARN_VERSION=latest
-ENV VERSION=v14.15.0  NPM_VERSION=6 YARN_VERSION=latest
+ENV VERSION=v${NODE_VERSION} NPM_VERSION=${NPM_VERSION} YARN_VERSION=latest
 
 # For base builds
 # ENV CONFIG_FLAGS="--without-npm" RM_DIRS=/usr/include
 # ENV CONFIG_FLAGS="--fully-static --without-npm" DEL_PKGS="libgcc libstdc++" RM_DIRS=/usr/include
-# For Intl builds uncomment
-# ENV CONFIG_FLAGS="--with-intl=full-icu --download=all"
+ENV INTL_CONFIG_FLAGS="--with-intl=full-icu --download=all"
+ENV CONFIG_FLAGS=${INTL:+$INTL_CONFIG_FLAGS}
+
+# TEMPORARY!
+RUN echo "version: $VERSION, npm_version: $NPM_VERSION, config: $CONFIG_FLAGS, native: $NATIVE"
 
 RUN apk add --no-cache curl make gcc g++ python linux-headers binutils-gold gnupg libstdc++ && \
   for server in ipv4.pool.sks-keyservers.net keyserver.pgp.com ha.pool.sks-keyservers.net; do \
     gpg --keyserver $server --recv-keys \
       4ED778F539E3634C779C87C6D7062848A1AB005C \
-      B9E2F5981AA6E0CD28160D9FF13993A75599653C \
       94AE36675C464D64BAFA68DD7434390BDBE9B9C5 \
-      B9AE9905FFD7803F25714661B63B535A4C206CA9 \
-      77984A986EBC2AA786BC0F66B01FBB92821C587A \
+      1C050899334244A8AF75E53792EF661D867B9DFA \
       71DCFD284A79C3B38668286BC97EC7A07EDE3FC1 \
-      FD3A5288F042B6850C66B31F09FE44734EB7990E \
       8FCCA13FEF1D0C2E91008E09770F7A9A5AE15600 \
       C4F0DFFF4E8C1A8236409D08E73BC641CC11F4C8 \
+      C82FA3AE1CBEDC6BE46B9360C43CEC45C17AB93C \
       DD8F2338BAE7501E3DD5AC78C273792F7D83545D \
-      A48C2BEE680E841632CD4E44F07496B3EB3C1762 && break; \
+      A48C2BEE680E841632CD4E44F07496B3EB3C1762 \
+      108F52B48DB57BB0CC439B2997B01419BD92F80A \
+      B9E2F5981AA6E0CD28160D9FF13993A75599653C && break; \
   done && \
   curl -sfSLO https://nodejs.org/dist/${VERSION}/node-${VERSION}.tar.xz && \
   curl -sfSL https://nodejs.org/dist/${VERSION}/SHASUMS256.txt.asc | gpg -d -o SHASUMS256.txt && \
@@ -57,7 +66,9 @@ RUN apk add --no-cache curl make gcc g++ python linux-headers binutils-gold gnup
       rm ${YARN_VERSION}.tar.gz*; \
     fi; \
   fi && \
-  apk del curl make gcc g++ python linux-headers binutils-gold gnupg ${DEL_PKGS} && \
+  if [ "$NATIVE" != "true" ]; then \
+    apk del curl make gcc g++ python linux-headers binutils-gold gnupg ${DEL_PKGS}; \
+  fi && \
   rm -rf ${RM_DIRS} /node-${VERSION}* /SHASUMS256.txt /tmp/* /var/cache/apk/* \
     /usr/share/man/* /usr/share/doc /root/.npm /root/.node-gyp /root/.config \
     /usr/lib/node_modules/npm/man /usr/lib/node_modules/npm/doc /usr/lib/node_modules/npm/docs \
