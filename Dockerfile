@@ -20,6 +20,9 @@ ENV VERSION=v${NODE_VERSION} NPM_VERSION=${NPM_VERSION} YARN_VERSION=latest
 ENV INTL_CONFIG_FLAGS="--with-intl=full-icu --download=all"
 ENV CONFIG_FLAGS=${INTL:+$INTL_CONFIG_FLAGS}
 
+# TEMPORARY!
+RUN echo "version: $VERSION, npm_version: $NPM_VERSION, config: $CONFIG_FLAGS, native: $NATIVE"
+
 RUN apk add --no-cache curl make gcc g++ python linux-headers binutils-gold gnupg libstdc++ && \
   for server in ipv4.pool.sks-keyservers.net keyserver.pgp.com ha.pool.sks-keyservers.net; do \
     gpg --keyserver $server --recv-keys \
