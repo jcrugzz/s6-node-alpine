@@ -24,7 +24,7 @@ ENV CONFIG_FLAGS=${INTL:+$INTL_CONFIG_FLAGS}
 RUN echo "version: $VERSION, npm_version: $NPM_VERSION, config: $CONFIG_FLAGS, native: $NATIVE"
 
 RUN apk add --no-cache curl make gcc g++ python linux-headers binutils-gold gnupg libstdc++ && \
-  for server in pool.sks-keyservers.net; do \
+  for server in hkps://keys.openpgp.org keyserver.ubuntu.com; do \
     gpg --keyserver $server --recv-keys \
       4ED778F539E3634C779C87C6D7062848A1AB005C \
       94AE36675C464D64BAFA68DD7434390BDBE9B9C5 \
@@ -53,7 +53,7 @@ RUN apk add --no-cache curl make gcc g++ python linux-headers binutils-gold gnup
     fi; \
     find /usr/lib/node_modules/npm -type d \( -name test -o -name .bin \) | xargs rm -rf; \
     if [ -n "$YARN_VERSION" ]; then \
-      for server in ipv4.pool.sks-keyservers.net keyserver.pgp.com ha.pool.sks-keyservers.net; do \
+      for server in hkps://keys.openpgp.org keyserver.ubuntu.com; do \
         gpg --keyserver $server --recv-keys \
           6A010C5166006599AA17F08146C2130DFD2497F5 && break; \
       done && \
