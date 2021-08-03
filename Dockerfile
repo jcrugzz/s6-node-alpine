@@ -24,11 +24,11 @@ ENV CONFIG_FLAGS=${INTL:+$INTL_CONFIG_FLAGS}
 RUN echo "version: $VERSION, npm_version: $NPM_VERSION, config: $CONFIG_FLAGS, native: $NATIVE"
 
 RUN apk add --no-cache curl make gcc g++ python linux-headers binutils-gold gnupg libstdc++ && \
-  for server in ipv4.pool.sks-keyservers.net keyserver.pgp.com ha.pool.sks-keyservers.net; do \
+  for server in pool.sks-keyservers.net; do \
     gpg --keyserver $server --recv-keys \
       4ED778F539E3634C779C87C6D7062848A1AB005C \
       94AE36675C464D64BAFA68DD7434390BDBE9B9C5 \
-      1C050899334244A8AF75E53792EF661D867B9DFA \
+      74F12602B6F1C4E913FAA37AD3A89613643B6201 \
       71DCFD284A79C3B38668286BC97EC7A07EDE3FC1 \
       8FCCA13FEF1D0C2E91008E09770F7A9A5AE15600 \
       C4F0DFFF4E8C1A8236409D08E73BC641CC11F4C8 \
